@@ -3,18 +3,40 @@
 
 name: Node.js CI
 
-on:
-  push:
-    branches: [ master ]
+on: [push]
 
 jobs:
   build:
-
+    name: TestJest
     runs-on: ubuntu-latest
-
+    
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js
-      uses: actions/setup-node@v3
-      
+    - uses: actions/setup-node@v3
+    
+    - uses: borales/actions-yarn@v2.3.0
+      with:
+        cmd: sudo apt install curl
+    - uses: borales/actions-yarn@v2.3.0
+      with:
+        cmd: curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+    - uses: borales/actions-yarn@v2.3.0
+      with:
+        cmd: echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+    - uses: actions/checkout@v3
+      with:
+        cmd: sudo apt update && sudo apt install yarn
+    - uses: actions/checkout@v3
+      with:
+        cmd: sudo apt install --no-install-recommends yarn
+    - uses: actions/checkout@v3
+      with:
+        cmd: npm init
+    - uses: actions/checkout@v3
+      with:
+        cmd: 	yarn add jest --dev
+   
+
+    - name: Run test jest  
     - run: yarn test
