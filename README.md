@@ -24,3 +24,7 @@ yarn --version
 Instale pacotes com Yarn:
 
 yarn add jest --dev
+
+Run test:
+
+yarn test
