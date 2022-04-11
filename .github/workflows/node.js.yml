@@ -1,45 +1,11 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
-workflow "build, test and publish on release" {
-  on = "push"
-  resolves = "publish"
-}
-
-# install with yarn
-action "install" {
-  uses = "actions/npm@1.0.0"
-  runs = "yarn"
-  args = "install"
-}
-
-# build with yarn
-action "build" {
-  needs = "install"
-  uses = "actions/npm@1.0.0"
-  runs = "yarn"
-  args = "build"
-}
-
-# test with yarn
-action "test" {
-  needs = "build"
-  uses = "actions/npm@1.0.0"
-  runs = "yarn"
-  args = "test"
-}
-
-# filter for a new tag
-action "check for new tag" {
-  needs = "Test"
-  uses = "actions/bin/filter@master"
-  args = "tag"
-}
-
-# publish with npm
-action "publish" {
-  needs = "check for new tag"
-  uses = "actions/npm@1.0.0"
-  args = "publish"
-  secrets = ["NPM_AUTH_TOKEN"]
-}
+name: learn-github-actions
+on: [push]
+jobs:
+  check-bats-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        
+      - run: yarn add jest --dev
+      - run: yarn test
